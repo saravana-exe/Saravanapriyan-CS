@@ -1,0 +1,22 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+iris = load_iris()
+iris_df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+iris_df['species'] = iris.target
+sepal_length_description = iris_df[['sepal length (cm)']].describe()
+print("SARAVANAPRIYAN-231401501")
+print("Statistical Description for Sepal Length:\n", sepal_length_description)
+plt.figure(figsize=(10, 6))
+sns.boxplot(x='species', y='sepal length (cm)', data=iris_df)
+plt.title('Box Plot of Sepal Length by Species')
+plt.xlabel('Species')
+plt.ylabel('Sepal Length (cm)')
+plt.show()
+plt.figure(figsize=(10, 6))
+sns.kdeplot(data=iris_df, x='sepal length (cm)', hue='species', fill=True)
+plt.title('Density Plot of Sepal Length by Species')
+plt.xlabel('Sepal Length (cm)')
+plt.ylabel('Density')
+plt.show()
