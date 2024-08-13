@@ -1,0 +1,23 @@
+import pandas as pd import seaborn as sns
+import matplotlib.pyplot as plt import scipy.stats as stats
+file_path='D:\\Example\\iris.csv'
+df = pd.read_csv(file_path)
+print("Available columns in the dataset:") print(df.columns)
+attribute = 'sepal.Length'
+print(f"\nFirst five records of {attribute}:") print(df[[attribute]].head())
+plt.figure(figsize=(12, 6)) plt.subplot(1, 2, 1)
+sns.histplot(df[attribute], kde=False, bins=20) plt.title(f'Histogram of {attribute}') plt.xlabel(attribute)
+plt.ylabel('Frequency')
+plt.subplot(1, 2, 2)
+sns.kdeplot(df[attribute], fill=True)
+plt.title(f'KDE of {attribute}')
+plt.xlabel(attribute)
+plt.ylabel('Density')
+plt.tight_layout()
+plt.show()
+plt.figure(figsize=(8, 6))
+stats.probplot(df[attribute], dist="norm", plot=plt) plt.title(f'Probability Plot of {attribute}')
+plt.show()
+skewness = df[attribute].skew()
+print (f"Skewness of {attribute}: {skewness}") kurtosis=df[attribute].kurtosis()
+print (f"Kurtosis of {attribute}: {kurtosis}")
