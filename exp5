@@ -1,0 +1,21 @@
+import numpy as np
+from scipy.optimize import minimize
+data = np.array([2.3, 1.9, 2.9, 3.0, 2.7])
+def negative_log_likelihood(params):
+    mu, sigma = params[0], params[1]
+    n = len(data)
+    likelihood = -n/2 * np.log(2 * np.pi) - n * np.log(sigma) - np.sum((data - mu)**2) / (2 * sigma**2)
+    return -likelihood  # We return the negative because we minimize the function
+initial_guess = [0, 1]
+result = minimize(negative_log_likelihood, initial_guess, method='L-BFGS-B', 
+                  bounds=[(-10, 10), (0.001, 10)])
+print("message:", result.message)
+print("success:", result.success)
+print("status:", result.status)
+print("fun:", result.fun)
+print("x:", result.x)
+print("nit:", result.nit)
+print("jac:", result.jac)
+print("nfev:", result.nfev)
+print("njev:", result.njev)
+print("hess_inv:", result.hess_inv)
