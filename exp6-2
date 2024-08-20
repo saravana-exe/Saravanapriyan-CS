@@ -1,0 +1,27 @@
+import numpy as np
+import pandas as pd
+data = np.array([[0.5, 0.6],
+                 [0.2, 0.3],
+                 [0.4, 0.5],
+                 [0.4, 0.4],
+                 [0.4, 0.3]])
+df = pd.DataFrame(data, columns=['A', 'B'])
+sum_columnwise = df.sum()
+print("SARAVANAPRIYAN - 231401501")
+print("Sum (Column-wise):")
+print(sum_columnwise)
+sum_rowwise = df.sum(axis=1)
+print("\nSum (Row-wise):")
+print(sum_rowwise)
+mean = df.mean()
+print("\nMean:")
+print(mean)
+count = df.shape
+print("\nCount:")
+print(count)
+minimum = df.min()
+print("\nMinimum:")
+print(minimum)
+maximum = df.max()
+print("\nMaximum:")
+print(maximum)
