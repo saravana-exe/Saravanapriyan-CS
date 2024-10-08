@@ -1,0 +1,50 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+data = load_iris()
+X = data.data
+plt.figure(figsize=(8, 6))
+plt.scatter(X[:, 0], X[:, 1], s=50)
+plt.title('Original Data: Iris Dataset')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.grid()
+plt.show()
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+plt.figure(figsize=(8, 6))
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], s=50, color='orange')
+plt.title('Standardized Data')
+plt.xlabel('Feature 1 (Standardized)')
+plt.ylabel('Feature 2 (Standardized)')
+plt.grid()
+plt.show()
+inertia = []
+K = range(1, 11) 
+for k in K:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X_scaled)
+    inertia.append(kmeans.inertia_)
+plt.figure(figsize=(8, 6))
+plt.plot(K, inertia, 'bo-')
+plt.title('Elbow Method for Optimal k')
+plt.xlabel('Number of Clusters (k)')
+plt.ylabel('Inertia')
+plt.grid()
+plt.show()
+optimal_k = 3 
+kmeans = KMeans(n_clusters=optimal_k, random_state=42)
+clusters = kmeans.fit_predict(X_scaled)
+
+plt.figure(figsize=(8, 6))
+for i in range(optimal_k):
+    plt.scatter(X_scaled[clusters == i, 0], X_scaled[clusters == i, 1], label=f'Cluster {i + 1}')
+plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=200, color='red', label='Centroids', marker='X')
+plt.title('K-means Clustering of Iris Dataset')
+plt.xlabel('Feature 1 (Standardized)')
+plt.ylabel('Feature 2 (Standardized)')
+plt.legend()
+plt.grid()
+plt.show()
