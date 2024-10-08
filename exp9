@@ -1,0 +1,16 @@
+import matplotlib.pyplot as plt
+department = ['Computer Science', 'Mechanical', 'Bio-Med', 'Food-Tech']
+students = [320, 450, 300, 120]
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)  
+plt.bar(department, students, color='skyblue')
+plt.xlabel('Department')
+plt.ylabel('Students')
+plt.title('Vertical Bar Plot: Quantity of Products')
+plt.subplot(1, 2, 2) 
+plt.barh(department, students, color='lightgreen')
+plt.xlabel('Department')
+plt.ylabel('Students')
+plt.title('Horizontal Bar Plot (H-Plot): Quantity of Products')
+plt.tight_layout()
+plt.show()
