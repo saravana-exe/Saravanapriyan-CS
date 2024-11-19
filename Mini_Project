@@ -1,0 +1,80 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+#Sample House Price Dataset (replace with your actual data)
+data = {
+    'Area': [1000, 1500, 1200, 1800, 2000, 1100, 1600],
+    'Bedrooms': [2, 3, 2, 3, 4, 2, 3],
+    'Bathrooms': [1, 2, 1, 2, 3, 1, 2],
+    'Location': ['Urban', 'Suburban', 'Urban', 'Rural', 'Suburban', 'Urban', 'Rural'],
+    'Property_Type': ['Apartment', 'House', 'Apartment', 'House', 'House', 'Apartment', 'House'],
+    'Garden_Size': [100, 200, 150, 300, 400, 120, 250],  # New variable
+    'Price': [250000, 400000, 300000, 500000, 600000, 280000, 450000]
+}
+df = pd.DataFrame(data)
+
+#User Input
+area = int(input("Enter the area of the house (in sq ft): "))
+bedrooms = int(input("Enter the number of bedrooms: "))
+bathrooms = int(input("Enter the number of bathrooms: "))
+location = input("Enter the location (Urban, Suburban, or Rural): ")
+property_type = input("Enter the property type (Apartment or House): ")
+garden_size = int(input("Enter the garden size (in sq ft): "))
+
+#Data Preprocessing (One-Hot Encoding for Categorical Features)
+df = pd.get_dummies(df, columns=['Location', 'Property_Type'])
+
+#Create a new row for the user input
+new_data = pd.DataFrame({
+    'Area': [area],
+    'Bedrooms': [bedrooms],
+    'Bathrooms': [bathrooms],
+    'Garden_Size': [garden_size],
+    'Location_' + location: [1],
+    'Location_Rural': [0] if location != 'Rural' else [1],
+    'Location_Suburban': [0] if location != 'Suburban' else [1],
+    'Location_Urban': [0] if location != 'Urban' else [1],
+    'Property_Type_Apartment': [1] if property_type == 'Apartment' else [0],
+    'Property_Type_House': [1] if property_type == 'House' else [0],
+}, index=[0])
+
+#Concatenate user data with the existing data
+df = pd.concat([df, new_data], ignore_index=True)
+
+#Separate features (X) and target variable (y)
+X = df.drop('Price', axis=1)
+y = df['Price']
+
+#Simple Linear Regression
+model = LinearRegression()
+model.fit(X[:-1], y[:-1])
+
+# Predict the price for the user's input
+predicted_price = int(model.predict(X.tail(1))[0])
+
+print("Predicted house price:", predicted_price)
+
+#Plotting 1: Scatter plot with regression line
+plt.figure(figsize=(10, 6))
+plt.scatter(df['Area'][:-1], df['Price'][:-1], color='skyblue', label='Actual Prices')  # Actual prices
+plt.plot(df['Area'][:-1], model.predict(X[:-1]), color='red', label='Regression Line')  # Predicted line
+plt.scatter(df['Area'].iloc[-1], predicted_price, color='red', label='Predicted Price')  # User's prediction
+plt.xlabel('Area (sq ft)')
+plt.ylabel('Price')
+plt.title('House Prices vs. Area')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+#Plotting 2: Histogram of House Prices
+plt.figure(figsize=(10, 6))
+plt.hist(df['Price'][:-1], bins=10, color='skyblue', edgecolor='black', alpha=0.7)
+plt.axvline(predicted_price, color='red', linestyle='dashed', linewidth=2, label=f'Predicted Price: {predicted_price}')
+plt.xlabel('Price')
+plt.ylabel('Frequency')
+plt.title('Distribution of House Prices')
+plt.legend()
+plt.grid(True)
+plt.show()
